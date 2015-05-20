@@ -1,0 +1,881 @@
+{
+    "$schema": "http://json-schema.org/schema#", 
+    "definitions": {
+        "relation": {
+            "raw": {
+                "type": "string"
+            },
+            "recid": {
+                "getter": "invenio.modules.relations:get_recid",
+                "setter": "invenio.modules.relations:set_recid",
+                "type": "string"
+            },
+            "relation": {
+                "description": "TO DO: Add weakref to the parent",
+                "getter": "invenio.modules.relations:get_relation",
+                "type": "object"
+            },
+            "uuid": {
+                "description": "Handled by uploader!!!",
+                "type": "string"
+            }
+        }
+    },
+    "properties": {
+
+        "abstract": {
+            "description": "Abstract shown to the users",
+            "getter": "inspire.modules.jsonalchemy.hep:get_abstract",
+            "type": "string"
+        },
+        "abstracts": {
+            "description": "All abstracts",
+            "items": {
+                "properties": {
+                    "source": {
+                        "description": "TO DO - implement enum handling in validation
+                                        TO DO - try skipping additional field
+                                                and use $sign directly",
+                        "enumSource": "abstract_source_enum",
+                        "type": "string",
+                    }, 
+                    "value": {
+                        "type": "string"
+                    }
+                }, 
+                "required": ["source", "value"],
+                "type": "object"
+            }, 
+            "type": "array", 
+            "uniqueItems": true
+        },
+        "abstract_source_enum": {
+            "$ref": "pathtokbformat=json"
+        },
+
+        "accelerator": {
+            "enumSource": "accelerator_enum",
+            "type": "string"
+        },
+        "accelerator_enum": {
+            "$ref": "anotherkbformat=json"
+        }, 
+
+        "acquisition_source": {
+            "properties": {
+                "email": {
+                    "format" : "email",
+                    "type": "string"
+                }, 
+                "method": {
+                    "enumSource": "acquisition_source_method_enum",
+                    "type": "string"
+                }, 
+                "source": {
+                    "enumSource": "acquisition_source_source_enum",
+                    "type": "string"
+                }, 
+                "submission_id": {
+                    "type": "string"
+                }
+            },
+            "required": ["submission_id"],
+            "type": "object"
+        },
+        "acquisition_source_method_enum": {
+            "$ref": "dfjjsdfjisdjfformat=json"
+        },
+        "acquisition_source_source_enum": {
+            "$ref": "sdfdsgfsdformat=json"
+        },
+
+        "authors": {
+            "description": "List with all the authors", 
+            "items": {
+                "properties": {
+                    "raw": {
+                        "properties": {
+                            "affiliations": {
+                                "items": {
+                                    "type": "string"
+                                },
+                                "type": "array"
+                            },
+                            "email": {
+                                "format": "email",
+                                "type": "string"
+                            },
+                            "inspire_id": {
+                                "description": "TO DO - bai will be the new inspireid",
+                                "type": "string",
+                                "pattern": "(\w+\.)+\d+"
+                            },
+                            "name": {
+                                "type": "string",
+                                "validation": "invenio.modules.authors.utils:valid_raw_name"
+                            },
+                            "orcid": {
+                                "description": "TO DO: add format orcid to json editor",
+                                "format": "orcid",
+                                "type": "string"
+                            },
+                            "other_ids": {
+                                "type": "array",
+                                "items": {
+                                    "properties": {
+                                        "source": {
+                                            "type": "string"
+                                        },
+                                        "value": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            },
+                            "role": {
+                                "enumSource": "author_role_enum",
+                                "type": "string"
+                            },
+                        },
+                        "type": "object"
+                    },
+                    "recid": {
+                        "getter": "invenio.modules.relations:get_recid",
+                        "setter": "invenio.modules.relations:set_recid",
+                        "type": "string"
+                    },
+                    "relation": {
+                        "description": "TO DO: Add weakref to the parent",
+                        "getter": "invenio.modules.relations:get_relation",
+                        "type": "object"
+                    },
+                    "uuid": {
+                        "description": "Handled by uploader!!!",
+                        "type": "string"
+                    }
+                }, 
+                "type": "object"
+            }, 
+            "type": "array", 
+            "uniqueItems": true
+        },
+        "author_role_enum": {
+            "$ref": "sfsdfsdfformat=json"
+        },
+        "additional_authors": {
+            "description": "All the authors but the first one", 
+            "watch": {"authors": "authors"},
+            "template": "{{ authors[1:] }}",
+            "type": "array"
+        },
+        "first_author": {
+            "description": "The main author",
+            "watch": {"authors": "authors"},
+            "template": "{{ authors[0] }}",
+            "type": "object"
+        },
+        "number_of_authors": {
+            "watch": {"authors": "authors"},
+            "template": "{{ authors|length }}",
+            "type": "integer"
+        },
+
+        "citations": {
+            "description": "List of citations in form of record ids",
+            "getter": "inspire.modules.relations:get_citations",
+            "items": {
+                "type": "integer"
+            },
+            "type": "array",
+            "uniqueItems": true
+        },
+        "number_of_citations": {
+            "description": "How many records cite given record", 
+            "watch": {"citations": "citations"},
+            "template": "{{ citations|length }}",
+            "type": "integer"
+        },
+ 
+        "experiment": {
+            "properties": {
+                "$ref": "#/definitions/relation"
+            },
+            "required": ["raw"],
+            "type": "object"
+        },  
+
+        "book_series": {
+            "properties": {
+                "title": {
+                    "type": "string"
+                }, 
+                "volume": {
+                    "type": "string"
+                }
+            }, 
+            "type": "object"
+        },
+
+        "classification_number": {
+            "items": {
+                "properties": {
+                    "value": {
+                        "type": "string"
+                    }, 
+                    "standard": {
+                        "enumSource": "classification_number_standard_enum",
+                        "type": "string"
+                    },
+                }, 
+                "type": "object",
+                "validation": "inspire.modules.jsonalchemy.hep:is_valid_classification_number"
+            },
+            "type": "array", 
+            "uniqueItems": true
+        },
+        "classification_number_standard_enum": {
+            "$ref": "dsgdfhdfgformat=json"
+        },
+
+        "collaboration": {
+            "description": "ASK ANNNNNNNNNNNNNNNNNETTTTTTTTTTTTTE",
+            "items": {
+                "properties": {
+                    "": {
+                        "type": "string"
+                    }
+                }, 
+                "type": "object"
+            }, 
+            "other": "{'producer': {'json_for_marc': [((), {'710__': ''})]}, 'extend': False, 'rules': {'json': [{'function': <code object <module> at 0x7f5baec0b7b0, file \"\", line 1>, 'decorators': {'on': {}, 'after': {}, 'before': {}}, 'source_format': 'json', 'type': 'creator', 'source_tags': ['collaboration']}], 'marc': [{'function': <code object <module> at 0x7f5baecffab0, file \"\", line 1>, 'decorators': {'on': {'legacy': None}, 'after': {}, 'before': {}}, 'source_format': 'marc', 'type': 'creator', 'source_tags': ['710__']}]}, 'pid': None, 'override': False, 'hidden': False, 'aliases': []}", 
+            "type": "array", 
+            "uniqueItems": true
+        },
+
+        "collections": {
+            "items": {
+                "getter": "invenio.modules.collections:get_collection",
+                "type": "string"
+            }, 
+            "type": "array", 
+            "uniqueItems": true
+        },
+
+        "corporate_author": {
+            "items": {
+                "type": "string"
+            },
+            "type": "array", 
+            "uniqueItems": true
+        },
+
+        "copyright": {
+            "properties": {
+                "holder": {
+                    "type": "string"
+                }, 
+                "material": {
+                    "type": "string"
+                }, 
+                "statement": {
+                    "type": "string"
+                }, 
+                "url": {
+                    "format": "url",
+                    "type": "string"
+                }
+            }, 
+            "type": "object"
+        },
+
+        "merged_into": {
+            "properties": {
+                "recid": {
+                    "getter": "invenio.modules.relations:get_recid",
+                    "setter": "invenio.modules.relations:set_recid",
+                    "type": "string"
+                },
+                "relation": {
+                    "description": "TO DO: Add weakref to the parent",
+                    "getter": "invenio.modules.relations:get_relation",
+                    "type": "object"
+                },
+                "uuid": {
+                    "description": "Handled by uploader!!!",
+                    "type": "string"
+                }
+            },
+            "type": "object"
+        },
+
+        "dois": {
+            "items": {
+                "format": "doi",
+                "type": "string"
+            }, 
+            "type": "array"
+        },
+        "doi": {
+            "getter": "inspire.modules.jsonalchemy.hep:get_main_doi",
+            "type": "string"
+        },
+
+        "funding_info": {
+            "items": {
+                "properties": {
+                    "agency": {
+                        "type": "string"
+                    }, 
+                    "grant_number": {
+                        "type": "string"
+                    }, 
+                    "project_number": {
+                        "type": "string"
+                    }
+                }, 
+                "type": "object"
+            }, 
+            "type": "array",
+            "uniqueItems": true
+        },
+
+        "hidden_note": {
+            "description": "TO DO: AUDIT LOG?????!?!?!?!?!",
+            "items": {
+                "properties": {
+                    "cern_reference": {
+                        "type": "string"
+                    }, 
+                    "source": {
+                        "type": "string"
+                    }, 
+                    "value": {
+                        "type": "string"
+                    }
+                }, 
+                "type": "object"
+            }, 
+            "other": "{'producer': {'json_for_marc': [((), {'595__9': 'source', '595__a': 'value', '595__b': 'cern_reference'})]}, 'extend': False, 'rules': {'json': [{'function': <code object <module> at 0x7f5baec0bcb0, file \"\", line 1>, 'decorators': {'on': {}, 'after': {}, 'before': {}}, 'source_format': 'json', 'type': 'creator', 'source_tags': ['hidden_note']}], 'marc': [{'function': <code object <module> at 0x7f5baec5a030, file \"\", line 1>, 'decorators': {'on': {'legacy': None}, 'after': {}, 'before': {}}, 'source_format': 'marc', 'type': 'creator', 'source_tags': ['595__']}]}, 'pid': None, 'override': False, 'hidden': False, 'schema': {'hidden_note': {'force': True, 'type': 'list'}}, 'aliases': []}", 
+            "type": "array", 
+            "uniqueItems": true
+        },
+
+        "imprint": {
+            "items": {
+                "properties": {
+                    "date": {
+                        "format": "date",
+                        "type": "string"
+                    }, 
+                    "place": {
+                        "type": "string"
+                    }, 
+                    "publisher": {
+                        "type": "string"
+                    }
+                }, 
+                "type": "object"
+            }, 
+            "type": "array", 
+            "uniqueItems": true
+        },
+
+        "isbns": {
+            "items": {
+                "properties": {
+                    "value": {
+                        "format": "isbn",
+                        "type": "string"
+                    }, 
+                    "medium": {
+                        "type": "string"
+                    }
+                }, 
+                "type": "object"
+            }, 
+            "type": "array", 
+            "uniqueItems": true
+        },
+        "isbn": {
+            "description": "TODO ask anettte which is preferred"
+        },
+
+        "language": {
+            "enumSource": "language_enum",
+            "type": "array", 
+            "uniqueItems": true
+        },
+        "language_enum": {
+            "$ref": "sgsgformat=json"
+        },
+
+        "license": {
+            "items": {
+                "properties": {
+                    "imposing": {
+                        "type": "string"
+                    }, 
+                    "license": {
+                        "description": "TO DO ENUM",
+                        "type": "string"
+                    }, 
+                    "material": {
+                        "type": "string"
+                    }, 
+                    "url": {
+                        "format": "url",
+                        "type": "string"
+                    }
+                }, 
+                "type": "object"
+            }, 
+            "type": "array", 
+            "uniqueItems": true
+        },
+        "notes": {
+            "items": {
+                "properties": {
+                    "source": {
+                        "type": "string"
+                    }, 
+                    "value": {
+                        "type": "string"
+                    }
+                }, 
+                "type": "object"
+            }, 
+            "type": "array", 
+            "uniqueItems": true
+        },
+        "number_of_pages": {
+            "type": "integer"
+        }, 
+        "preprint_date": {
+            "format": "date",
+            "type": "string"
+        }, 
+        "publication_info": {
+            "items": {
+                "properties": {
+                    "conference": {
+                        "$ref": "#/definitions/relation"
+                    }, 
+                    "conference_paper_info": {
+                        "type": "string"
+                    },
+                    "journal_issue": {
+                        "type": "string"
+                    }, 
+                    "journal_title": {
+                        "enumSource": "journal_title_enum",
+                        "type": "string"
+                    }, 
+                    "journal_volume": {
+                        "type": "string"
+                    }, 
+                    "page_range": {
+                        "type": "string"
+                    }, 
+                    "pubinfo_freetext": {
+                        "type": "string"
+                    }, 
+                    "year": {
+                        "minimum": 1000,
+                        "maximum": 2050,
+                        "type": "integer"
+                    }
+                },
+                "type": "object"
+            }, 
+            "type": "array", 
+            "uniqueItems": true
+        }, 
+        "journal_title_enum": {
+            "$ref": "sdfsdgsdformat=json"
+        },
+
+################################################################################
+
+        "reference": {
+            "items": {
+                "properties": {
+                    "authors": {
+                        "type": "string"
+                    }, 
+                    "collaboration": {
+                        "type": "string"
+                    }, 
+                    "doi": {
+                        "type": "string"
+                    }, 
+                    "editors": {
+                        "type": "string"
+                    }, 
+                    "isbn": {
+                        "type": "string"
+                    }, 
+                    "journal_pubnote": {
+                        "type": "string"
+                    }, 
+                    "maintitle": {
+                        "type": "string"
+                    }, 
+                    "misc": {
+                        "type": "string"
+                    }, 
+                    "number": {
+                        "type": "string"
+                    }, 
+                    "publisher": {
+                        "type": "string"
+                    }, 
+                    "raw_reference": {
+                        "type": "string"
+                    }, 
+                    "recid": {
+                        "type": "string"
+                    }, 
+                    "report_number": {
+                        "type": "string"
+                    }, 
+                    "texkey": {
+                        "type": "string"
+                    }, 
+                    "title": {
+                        "type": "string"
+                    }, 
+                    "url": {
+                        "type": "string"
+                    }, 
+                    "year": {
+                        "type": "string"
+                    }
+                }, 
+                "type": "object"
+            }, 
+            "other": "{'producer': {'json_for_marc': [((), {'999C5y': 'year', '999C5p': 'publisher', '999C5x': 'raw_reference', '999C5s': 'journal_pubnote', '999C5r': 'report_number', '999C51': 'texkey', '999C50': 'recid', '999C5u': 'url', '999C5t': 'title', '999C5i': 'isbn', '999C5h': 'authors', '999C5o': 'number', '999C5m': 'misc', '999C5c': 'collaboration', '999C5a': 'doi', '999C5q': 'maintitle', '999C5e': 'editors'})]}, 'extend': False, 'rules': {'json': [{'function': <code object <module> at 0x7f5baec102b0, file \"\", line 1>, 'decorators': {'on': {}, 'after': {}, 'before': {}}, 'source_format': 'json', 'type': 'creator', 'source_tags': ['reference']}], 'marc': [{'function': <code object <module> at 0x7f5baec5a5b0, file \"\", line 1>, 'decorators': {'on': {'legacy': None}, 'after': {}, 'before': {}}, 'source_format': 'marc', 'type': 'creator', 'source_tags': ['999C5']}]}, 'pid': None, 'override': False, 'hidden': False, 'aliases': []}", 
+            "type": "array", 
+            "uniqueItems": true
+        }, 
+        "refextract": {
+            "items": {
+                "properties": {}, 
+                "type": "object"
+            }, 
+            "other": "{'extend': False, 'rules': {'json': [{'function': <code object <module> at 0x7f5baec10330, file \"\", line 1>, 'decorators': {'on': {}, 'after': {}, 'before': {}}, 'source_format': 'json', 'type': 'creator', 'source_tags': ['refextract']}], 'marc': [{'function': <code object <module> at 0x7f5baec5a6b0, file \"\", line 1>, 'decorators': {'on': {'legacy': None}, 'after': {}, 'before': {}}, 'source_format': 'marc', 'type': 'creator', 'source_tags': ['999C6']}]}, 'pid': None, 'override': False, 'hidden': False, 'aliases': []}", 
+            "type": "array", 
+            "uniqueItems": true
+        }, 
+        "report_number": {
+            "items": {
+                "properties": {
+                    "arxiv_category": {
+                        "type": "string"
+                    }, 
+                    "primary": {
+                        "type": "string"
+                    }, 
+                    "source": {
+                        "type": "string"
+                    }
+                }, 
+                "type": "object"
+            }, 
+            "other": "{'producer': {'json_for_marc': [((), {'037__9': 'source', '037__c': 'arxiv_category', '037__a': 'primary'})]}, 'extend': False, 'rules': {'json': [{'function': <code object <module> at 0x7f5baec103b0, file \"\", line 1>, 'decorators': {'on': {}, 'after': {}, 'before': {}}, 'source_format': 'json', 'type': 'creator', 'source_tags': ['report_number']}], 'marc': [{'function': <code object <module> at 0x7f5baec5a530, file \"\", line 1>, 'decorators': {'on': {'legacy': None}, 'after': {}, 'before': {}}, 'source_format': 'marc', 'type': 'creator', 'source_tags': ['037__']}]}, 'pid': None, 'override': False, 'hidden': False, 'schema': {'report_number': {'force': True, 'type': 'list'}}, 'aliases': []}", 
+            "type": "array", 
+            "uniqueItems": true
+        }, 
+        "spires_sysno": {
+            "items": {
+                "properties": {
+                    "": {
+                        "type": "string"
+                    }
+                }, 
+                "type": "object"
+            }, 
+            "other": "{'producer': {'json_for_marc': [((), {'970__a': ''})]}, 'extend': False, 'rules': {'json': [{'function': <code object <module> at 0x7f5baec10530, file \"\", line 1>, 'decorators': {'on': {}, 'after': {}, 'before': {}}, 'source_format': 'json', 'type': 'creator', 'source_tags': ['spires_sysno']}], 'marc': [{'function': <code object <module> at 0x7f5baec5a830, file \"\", line 1>, 'decorators': {'on': {'legacy': None}, 'after': {}, 'before': {}}, 'source_format': 'marc', 'type': 'creator', 'source_tags': ['970__']}]}, 'pid': 1, 'override': False, 'hidden': False, 'aliases': []}", 
+            "type": "array", 
+            "uniqueItems": true
+        }, 
+        "subject_term": {
+            "items": {
+                "properties": {
+                    "scheme": {
+                        "type": "string"
+                    }, 
+                    "source": {
+                        "type": "string"
+                    }, 
+                    "term": {
+                        "type": "string"
+                    }
+                }, 
+                "type": "object"
+            }, 
+            "other": "{'producer': {'json_for_marc': [((), {'65017a': 'term', '650179': 'source', '650172': 'scheme'})]}, 'extend': False, 'rules': {'json': [{'function': <code object <module> at 0x7f5baec10430, file \"\", line 1>, 'decorators': {'on': {}, 'after': {}, 'before': {}}, 'source_format': 'json', 'type': 'creator', 'source_tags': ['subject_term']}], 'marc': [{'function': <code object <module> at 0x7f5baec5a730, file \"\", line 1>, 'decorators': {'on': {'legacy': None}, 'after': {}, 'before': {}}, 'source_format': 'marc', 'type': 'creator', 'source_tags': ['65017']}]}, 'pid': None, 'override': False, 'hidden': False, 'aliases': []}", 
+            "type": "array", 
+            "uniqueItems": true
+        }, 
+        "succeeding_entry": {
+            "items": {
+                "properties": {
+                    "isbn": {
+                        "type": "string"
+                    }, 
+                    "recid": {
+                        "type": "string"
+                    }, 
+                    "reportnumber": {
+                        "type": "string"
+                    }
+                }, 
+                "type": "object"
+            }, 
+            "other": "{'producer': {'json_for_marc': [((), {'785__r': 'reportnumber', '785__z': 'isbn', '785__w': 'recid'})]}, 'extend': False, 'rules': {'json': [{'function': <code object <module> at 0x7f5baec104b0, file \"\", line 1>, 'decorators': {'on': {}, 'after': {}, 'before': {}}, 'source_format': 'json', 'type': 'creator', 'source_tags': ['succeeding_entry']}], 'marc': [{'function': <code object <module> at 0x7f5baec5a7b0, file \"\", line 1>, 'decorators': {'on': {'legacy': None}, 'after': {}, 'before': {}}, 'source_format': 'marc', 'type': 'creator', 'source_tags': ['785__']}]}, 'pid': None, 'override': False, 'hidden': False, 'aliases': []}", 
+            "type": "array", 
+            "uniqueItems": true
+        }, 
+        "system_number_external": {
+            "items": {
+                "properties": {
+                    "institute": {
+                        "type": "string"
+                    }, 
+                    "obsolete": {
+                        "type": "string"
+                    }, 
+                    "value": {
+                        "type": "string"
+                    }
+                }, 
+                "type": "object"
+            }, 
+            "other": "{'producer': {'json_for_marc': [((), {'035__a': 'value', '035__z': 'obsolete', '035__9': 'institute'})]}, 'extend': False, 'rules': {'json': [{'function': <code object <module> at 0x7f5baec105b0, file \"\", line 1>, 'decorators': {'on': {}, 'after': {}, 'before': {}}, 'source_format': 'json', 'type': 'creator', 'source_tags': ['system_number_external']}], 'marc': [{'function': <code object <module> at 0x7f5baec5a8b0, file \"\", line 1>, 'decorators': {'on': {'legacy': None}, 'after': {}, 'before': {}}, 'source_format': 'marc', 'type': 'creator', 'source_tags': ['035__']}]}, 'pid': 2, 'override': False, 'hidden': False, 'aliases': ['system_control_number']}", 
+            "type": "array", 
+            "uniqueItems": true
+        }, 
+        "thesaurus_terms": {
+            "description": "TO DO: ADD free keywords",
+            "items": {
+                "properties": {
+                    "classification_scheme": {
+                        "type": "string"
+                    }, 
+                    "energy_range": {
+                        "type": "string"
+                    }, 
+                    "keyword": {
+                        "type": "string"
+                    }
+                }, 
+                "type": "object"
+            }, 
+            "other": "{'producer': {'json_for_marc': [((), {'695__e': 'energy_range', '695__a': 'keyword', '695__2': 'classification_scheme'})]}, 'extend': False, 'rules': {'json': [{'function': <code object <module> at 0x7f5baec10630, file \"\", line 1>, 'decorators': {'on': {}, 'after': {}, 'before': {}}, 'source_format': 'json', 'type': 'creator', 'source_tags': ['thesaurus_terms']}], 'marc': [{'function': <code object <module> at 0x7f5baec5a9b0, file \"\", line 1>, 'decorators': {'on': {'legacy': None}, 'after': {}, 'before': {}}, 'source_format': 'marc', 'type': 'creator', 'source_tags': ['695__']}]}, 'pid': None, 'override': False, 'hidden': False, 'aliases': []}", 
+            "type": "array", 
+            "uniqueItems": true
+        }, 
+        "thesis": {
+            "items": {
+                "properties": {
+                    "date": {
+                        "type": "string"
+                    }, 
+                    "degree_type": {
+                        "type": "string"
+                    }, 
+                    "university": {
+                        "type": "string"
+                    }
+                }, 
+                "type": "object"
+            }, 
+            "other": "{'producer': {'json_for_marc': [((), {'502__d': 'date', '502__c': 'university', '502__b': 'degree_type'})]}, 'extend': False, 'rules': {'json': [{'function': <code object <module> at 0x7f5baec106b0, file \"\", line 1>, 'decorators': {'on': {}, 'after': {}, 'before': {}}, 'source_format': 'json', 'type': 'creator', 'source_tags': ['thesis']}], 'marc': [{'function': <code object <module> at 0x7f5baec5a930, file \"\", line 1>, 'decorators': {'on': {'legacy': None}, 'after': {}, 'before': {}}, 'source_format': 'marc', 'type': 'creator', 'source_tags': ['502__']}]}, 'pid': None, 'override': False, 'hidden': False, 'aliases': []}", 
+            "type": "array", 
+            "uniqueItems": true
+        }, 
+        "thesis_supervisor": {
+            "items": {
+                "properties": {
+                    "INSPIRE_id": {
+                        "type": "string"
+                    }, 
+                    "affiliation": {
+                        "type": "string"
+                    }, 
+                    "external_id": {
+                        "type": "string"
+                    }, 
+                    "full_name": {
+                        "type": "string"
+                    }
+                }, 
+                "type": "object"
+            }, 
+            "other": "{'producer': {'json_for_marc': [((), {'701__u': 'affiliation', '701__i': 'INSPIRE_id', '701__j': 'external_id', '701__a': 'full_name'})]}, 'extend': False, 'rules': {'json': [{'function': <code object <module> at 0x7f5baec10730, file \"\", line 1>, 'decorators': {'on': {}, 'after': {}, 'before': {}}, 'source_format': 'json', 'type': 'creator', 'source_tags': ['thesis_supervisor']}], 'marc': [{'function': <code object <module> at 0x7f5baec5aa30, file \"\", line 1>, 'decorators': {'on': {'legacy': None}, 'after': {}, 'before': {}}, 'source_format': 'marc', 'type': 'creator', 'source_tags': ['701__']}]}, 'pid': None, 'override': False, 'hidden': False, 'aliases': []}", 
+            "type": "array", 
+            "uniqueItems": true
+        }, 
+        "title": {
+            "items": {
+                "properties": {
+                    "source": {
+                        "type": "string"
+                    }, 
+                    "subtitle": {
+                        "type": "string"
+                    }, 
+                    "title": {
+                        "type": "string"
+                    }
+                }, 
+                "type": "object"
+            }, 
+            "other": "{'producer': {'json_for_marc': [((), {'245__a': 'title', '245__9': 'source', '245__b': 'subtitle'})]}, 'extend': False, 'rules': {'json': [{'function': <code object <module> at 0x7f5baec10830, file \"\", line 1>, 'decorators': {'on': {}, 'after': {}, 'before': {}}, 'source_format': 'json', 'type': 'creator', 'source_tags': ['title']}], 'marc': [{'function': <code object <module> at 0x7f5baec5ab30, file \"\", line 1>, 'decorators': {'on': {'legacy': None}, 'after': {}, 'before': {}}, 'source_format': 'marc', 'type': 'creator', 'source_tags': ['245__']}]}, 'pid': None, 'override': False, 'hidden': False, 'aliases': []}", 
+            "type": "array", 
+            "uniqueItems": true
+        }, 
+        "title_arXiv": {
+            "items": {
+                "properties": {
+                    "source": {
+                        "type": "string"
+                    }, 
+                    "subtitle": {
+                        "type": "string"
+                    }, 
+                    "value": {
+                        "type": "string"
+                    }
+                }, 
+                "type": "object"
+            }, 
+            "other": "{'producer': {'json_for_marc': [((), {'246__a': 'value', '246__b': 'subtitle', '246__9': 'source'})]}, 'extend': False, 'rules': {'json': [{'function': <code object <module> at 0x7f5baec108b0, file \"\", line 1>, 'decorators': {'on': {}, 'after': {}, 'before': {}}, 'source_format': 'json', 'type': 'creator', 'source_tags': ['title_arXiv']}], 'marc': [{'function': <code object <module> at 0x7f5baec5abb0, file \"\", line 1>, 'decorators': {'on': {'legacy': None}, 'after': {}, 'before': {}}, 'source_format': 'marc', 'type': 'creator', 'source_tags': ['246__']}]}, 'pid': None, 'override': False, 'hidden': False, 'aliases': []}", 
+            "type": "array", 
+            "uniqueItems": true
+        }, 
+        "title_old": {
+            "items": {
+                "properties": {
+                    "main": {
+                        "type": "string"
+                    }, 
+                    "subtitle": {
+                        "type": "string"
+                    }
+                }, 
+                "type": "object"
+            }, 
+            "other": "{'producer': {'json_for_marc': [((), {'247__b': 'subtitle', '247__a': 'main'})]}, 'extend': False, 'rules': {'json': [{'function': <code object <module> at 0x7f5baec10930, file \"\", line 1>, 'decorators': {'on': {}, 'after': {}, 'before': {}}, 'source_format': 'json', 'type': 'creator', 'source_tags': ['title_old']}], 'marc': [{'function': <code object <module> at 0x7f5baec5ac30, file \"\", line 1>, 'decorators': {'on': {'legacy': None}, 'after': {}, 'before': {}}, 'source_format': 'marc', 'type': 'creator', 'source_tags': ['247__']}]}, 'pid': None, 'override': False, 'hidden': False, 'aliases': []}", 
+            "type": "array", 
+            "uniqueItems": true
+        }, 
+        "title_translation": {
+            "items": {
+                "properties": {
+                    "subtitle": {
+                        "type": "string"
+                    }, 
+                    "value": {
+                        "type": "string"
+                    }
+                }, 
+                "type": "object"
+            }, 
+            "other": "{'producer': {'json_for_marc': [((), {'242__a': 'value', '242__b': 'subtitle'})]}, 'extend': False, 'rules': {'json': [{'function': <code object <module> at 0x7f5baec109b0, file \"\", line 1>, 'decorators': {'on': {}, 'after': {}, 'before': {}}, 'source_format': 'json', 'type': 'creator', 'source_tags': ['title_translation']}], 'marc': [{'function': <code object <module> at 0x7f5baec5acb0, file \"\", line 1>, 'decorators': {'on': {'legacy': None}, 'after': {}, 'before': {}}, 'source_format': 'marc', 'type': 'creator', 'source_tags': ['242__']}]}, 'pid': None, 'override': False, 'hidden': False, 'aliases': []}", 
+            "type": "array", 
+            "uniqueItems": true
+        }, 
+        "title_variation": {
+            "items": {
+                "properties": {
+                    "": {
+                        "type": "string"
+                    }
+                }, 
+                "type": "object"
+            }, 
+            "other": "{'producer': {'json_for_marc': [((), {'210__a': ''})]}, 'extend': False, 'rules': {'json': [{'function': <code object <module> at 0x7f5baec107b0, file \"\", line 1>, 'decorators': {'on': {}, 'after': {}, 'before': {}}, 'source_format': 'json', 'type': 'creator', 'source_tags': ['title_variation']}], 'marc': [{'function': <code object <module> at 0x7f5baec5aab0, file \"\", line 1>, 'decorators': {'on': {'legacy': None}, 'after': {}, 'before': {}}, 'source_format': 'marc', 'type': 'creator', 'source_tags': ['210__']}]}, 'pid': None, 'override': False, 'hidden': False, 'aliases': []}", 
+            "type": "array", 
+            "uniqueItems": true
+        }, 
+        "url": {
+            "items": {
+                "properties": {
+                    "description": {
+                        "type": "string"
+                    }, 
+                    "doc_string": {
+                        "type": "string"
+                    }, 
+                    "material_type": {
+                        "type": "string"
+                    }, 
+                    "url": {
+                        "type": "string"
+                    }
+                }, 
+                "type": "object"
+            }, 
+            "other": "{'producer': {'json_for_marc': [((), {'8564_y': 'description', '8564_3': 'material_type', '8564_u': 'url', '8564_w': 'doc_string'})]}, 'extend': False, 'rules': {'json': [{'function': <code object <module> at 0x7f5baec10a30, file \"\", line 1>, 'decorators': {'on': {}, 'after': {}, 'before': {}}, 'source_format': 'json', 'type': 'creator', 'source_tags': ['url']}], 'marc': [{'function': <code object <module> at 0x7f5baec5ad30, file \"\", line 1>, 'decorators': {'on': {'legacy': None}, 'after': {}, 'before': {}}, 'source_format': 'marc', 'type': 'creator', 'source_tags': ['8564_']}]}, 'pid': None, 'override': False, 'hidden': False, 'schema': {'url': {'force': True, 'type': 'list'}}, 'aliases': []}", 
+            "type": "array", 
+            "uniqueItems": true
+        }
+    }, 
+    "required": [
+        "funding_info", 
+        "system_number_external", 
+        "isbn", 
+        "reference", 
+        "report_number", 
+        "refextract", 
+        "abstract", 
+        "fft", 
+        "imprint", 
+        "edition", 
+        "thesis_supervisor", 
+        "thesis", 
+        "hidden_note", 
+        "publication_info", 
+        "_additional_authors", 
+        "coyright", 
+        "nonpublic_note", 
+        "_cited_by_count", 
+        "agency_code", 
+        "free_keyword", 
+        "title", 
+        "thesaurus_terms", 
+        "note", 
+        "creation_modification_date", 
+        "collections", 
+        "title_arXiv", 
+        "title_variation", 
+        "files", 
+        "affiliation_old", 
+        "book_series", 
+        "language", 
+        "collaboration", 
+        "succeeding_entry", 
+        "title_old", 
+        "subject_term", 
+        "doi", 
+        "classification_number", 
+        "authors", 
+        "_number_of_comments", 
+        "acquisition_source", 
+        "oai_pmh", 
+        "page_nr", 
+        "number_of_authors", 
+        "license", 
+        "accelerator_experiment", 
+        "url", 
+        "deleted_recid", 
+        "spires_sysno", 
+        "title_translation", 
+        "_number_of_reviews", 
+        "corporate_author", 
+        "preprint_info"
+    ], 
+    "type": "object"
+}
