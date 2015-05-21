@@ -1,5 +1,7 @@
 {
     "$schema": "http://json-schema.org/schema#", 
+    "title": "HEP Record",
+    "description": "High-Energy Physics document (e.g. article, preprint, thesis, proceeding, book...)",
     "definitions": {
         "relation": {
             "raw": {
@@ -22,10 +24,9 @@
         }
     },
     "properties": {
-
         "abstract": {
             "description": "Abstract shown to the users",
-            "getter": "inspire.modules.jsonalchemy.hep:get_abstract",
+            "getter": "inspire.modules.jsonalchemy.hep:get_preferred_abstract",
             "type": "string"
         },
         "abstracts": {
@@ -33,9 +34,7 @@
             "items": {
                 "properties": {
                     "source": {
-                        "description": "TO DO - implement enum handling in validation
-                                        TO DO - try skipping additional field
-                                                and use $sign directly",
+                        "description": "TODO - implement enum handling in validation TODO - try skipping additional field and use $sign directly",
                         "enumSource": "abstract_source_enum",
                         "type": "string",
                     }, 
