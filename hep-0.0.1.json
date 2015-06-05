@@ -494,9 +494,6 @@
         "journal_title_enum": {
             "$ref": "sdfsdgsdformat=json"
         },
-
-################################################################################
-
         "reference": {
             "items": {
                 "properties": {
@@ -507,16 +504,19 @@
                         "type": "string"
                     }, 
                     "doi": {
-                        "type": "string"
+                        "type": "string",
+                        "format": "doi"
                     }, 
                     "editors": {
                         "type": "string"
                     }, 
                     "isbn": {
-                        "type": "string"
+                        "type": "string",
+                        "format": "isbn"
                     }, 
                     "journal_pubnote": {
-                        "type": "string"
+                        "type": "string",
+                        "pattern": ".*,.*,.*"
                     }, 
                     "maintitle": {
                         "type": "string"
@@ -525,7 +525,7 @@
                         "type": "string"
                     }, 
                     "number": {
-                        "type": "string"
+                        "type": "integer",
                     }, 
                     "publisher": {
                         "type": "string"
@@ -534,7 +534,7 @@
                         "type": "string"
                     }, 
                     "recid": {
-                        "type": "string"
+                        "type": "integer"
                     }, 
                     "report_number": {
                         "type": "string"
@@ -546,24 +546,15 @@
                         "type": "string"
                     }, 
                     "url": {
-                        "type": "string"
+                        "type": "string",
+                        "format": "url"
                     }, 
                     "year": {
-                        "type": "string"
+                        "type": "integer",
                     }
                 }, 
                 "type": "object"
             }, 
-            "other": "{'producer': {'json_for_marc': [((), {'999C5y': 'year', '999C5p': 'publisher', '999C5x': 'raw_reference', '999C5s': 'journal_pubnote', '999C5r': 'report_number', '999C51': 'texkey', '999C50': 'recid', '999C5u': 'url', '999C5t': 'title', '999C5i': 'isbn', '999C5h': 'authors', '999C5o': 'number', '999C5m': 'misc', '999C5c': 'collaboration', '999C5a': 'doi', '999C5q': 'maintitle', '999C5e': 'editors'})]}, 'extend': False, 'rules': {'json': [{'function': <code object <module> at 0x7f5baec102b0, file \"\", line 1>, 'decorators': {'on': {}, 'after': {}, 'before': {}}, 'source_format': 'json', 'type': 'creator', 'source_tags': ['reference']}], 'marc': [{'function': <code object <module> at 0x7f5baec5a5b0, file \"\", line 1>, 'decorators': {'on': {'legacy': None}, 'after': {}, 'before': {}}, 'source_format': 'marc', 'type': 'creator', 'source_tags': ['999C5']}]}, 'pid': None, 'override': False, 'hidden': False, 'aliases': []}", 
-            "type": "array", 
-            "uniqueItems": true
-        }, 
-        "refextract": {
-            "items": {
-                "properties": {}, 
-                "type": "object"
-            }, 
-            "other": "{'extend': False, 'rules': {'json': [{'function': <code object <module> at 0x7f5baec10330, file \"\", line 1>, 'decorators': {'on': {}, 'after': {}, 'before': {}}, 'source_format': 'json', 'type': 'creator', 'source_tags': ['refextract']}], 'marc': [{'function': <code object <module> at 0x7f5baec5a6b0, file \"\", line 1>, 'decorators': {'on': {'legacy': None}, 'after': {}, 'before': {}}, 'source_format': 'marc', 'type': 'creator', 'source_tags': ['999C6']}]}, 'pid': None, 'override': False, 'hidden': False, 'aliases': []}", 
             "type": "array", 
             "uniqueItems": true
         }, 
@@ -824,58 +815,7 @@
         }
     }, 
     "required": [
-        "funding_info", 
-        "system_number_external", 
-        "isbn", 
-        "reference", 
-        "report_number", 
-        "refextract", 
-        "abstract", 
-        "fft", 
-        "imprint", 
-        "edition", 
-        "thesis_supervisor", 
-        "thesis", 
-        "hidden_note", 
-        "publication_info", 
-        "_additional_authors", 
-        "coyright", 
-        "nonpublic_note", 
-        "_cited_by_count", 
-        "agency_code", 
-        "free_keyword", 
         "title", 
-        "thesaurus_terms", 
-        "note", 
-        "creation_modification_date", 
-        "collections", 
-        "title_arXiv", 
-        "title_variation", 
-        "files", 
-        "affiliation_old", 
-        "book_series", 
-        "language", 
-        "collaboration", 
-        "succeeding_entry", 
-        "title_old", 
-        "subject_term", 
-        "doi", 
-        "classification_number", 
-        "authors", 
-        "_number_of_comments", 
-        "acquisition_source", 
-        "oai_pmh", 
-        "page_nr", 
-        "number_of_authors", 
-        "license", 
-        "accelerator_experiment", 
-        "url", 
-        "deleted_recid", 
-        "spires_sysno", 
-        "title_translation", 
-        "_number_of_reviews", 
-        "corporate_author", 
-        "preprint_info"
     ], 
     "type": "object"
 }
