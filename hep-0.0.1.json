@@ -33,9 +33,7 @@
             "items": {
                 "properties": {
                     "source": {
-                        "description": "TO DO - implement enum handling in validation
-                                        TO DO - try skipping additional field
-                                                and use $sign directly",
+                        "description": "TO DO - implement enum handling in validation\nTO DO - try skipping additional field\nand use $sign directly",
                         "enumSource": "abstract_source_enum",
                         "type": "string",
                     }, 
@@ -108,7 +106,7 @@
                             "inspire_id": {
                                 "description": "TO DO - bai will be the new inspireid",
                                 "type": "string",
-                                "pattern": "(\w+\.)+\d+"
+                                "pattern": "(\\w+\\.)+\\d+"
                             },
                             "name": {
                                 "type": "string",
